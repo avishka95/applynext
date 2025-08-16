@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"],
+      "@ai/*": ["ai/*"],
+      "@routes/*": ["routes/*"],
+    },
+    "target": "es2020",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "outDir": "./dist",
+    "rootDir": "./",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+  },
+  "include": ["src/**/*", "tests/**/*"],
+  "ts-node": {
+    "files": true
+  }
+}
