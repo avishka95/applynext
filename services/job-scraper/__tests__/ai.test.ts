@@ -1,5 +1,6 @@
-import { JobExtractionPromptName } from "../src/ai/types";
-import promptLoader from "../src/ai/prompt-loader";
+import { JobExtractionPromptName } from "@/ai/types";
+import promptLoader from "@/ai/promptLoader";
+import { googleGenAI } from "@/ai/models";
 
 describe("AI module testing", () => {
   const promptNames: JobExtractionPromptName[] = ["job_extraction"];
