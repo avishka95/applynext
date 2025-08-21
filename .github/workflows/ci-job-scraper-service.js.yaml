@@ -13,6 +13,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: development
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      TEST_VALID_JOB_URL: ${{ vars.TEST_VALID_JOB_URL }}
+      TEST_SAMPLE_STRING: ${{ vars.TEST_SAMPLE_STRING }}
+      TEST_SAMPLE_NUMBER: ${{ vars.TEST_SAMPLE_NUMBER }}
+      TEST_SAMPLE_BOOLEAN: ${{ vars.TEST_SAMPLE_BOOLEAN }}
     defaults:
       run:
         working-directory: services/job-scraper
