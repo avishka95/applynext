@@ -1,6 +1,6 @@
-import fs from "fs";
-import path from "path";
-import { JobExtractionPromptName } from "./types";
+import fs from 'fs';
+import path from 'path';
+import { JobExtractionPromptName } from './types';
 
 class PromptLoader {
   private static instance: PromptLoader;
@@ -13,14 +13,14 @@ class PromptLoader {
   }
 
   async loadPrompts(): Promise<number> {
-    const promptsDir = path.join(__dirname, "/prompts");
+    const promptsDir = path.join(__dirname, '/prompts');
     const files = fs.readdirSync(promptsDir);
     for (const file of files) {
-      if (file.endsWith(".md")) {
-        const name = file.replace(".md", "");
+      if (file.endsWith('.md')) {
+        const name = file.replace('.md', '');
         this.prompts.set(
           name,
-          fs.readFileSync(path.join(promptsDir, file), "utf8")
+          fs.readFileSync(path.join(promptsDir, file), 'utf8'),
         );
       }
     }

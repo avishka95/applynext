@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc --build",
-    "start": "node dist/service.js",
+    "start": "node dist/src/service.js",
     "dev": "ts-node-dev --watch --respawn --transpile-only src/service.ts",
-    "test": "npx jest"
+    "test": "npx jest",
+    "test:watch": "npx jest --watch",
+    "test:coverage": "npx jest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -26,7 +28,15 @@
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
+    "@types/supertest": "^6.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.40.0",
+    "@typescript-eslint/parser": "^8.40.0",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
     "jest": "^30.0.5",
+    "prettier": "^3.6.2",
+    "supertest": "^7.1.4",
     "ts-jest": "^29.4.1"
   }
 }
