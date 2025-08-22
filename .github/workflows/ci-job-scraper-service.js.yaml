@@ -2,7 +2,7 @@ name: CI - Job Scraper Service
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "ci-setup"]
     paths:
       - 'services/job-scraper/**'
   pull_request:
