@@ -5,6 +5,7 @@ dotenv.config({ quiet: true });
 
 interface Config {
     geminiApiKey: string;
+    postgreDatabaseUrl: string;
     containerModeOn: boolean | null;
 }
 
@@ -15,6 +16,7 @@ function loadEnvConfig(preLoadFn?: () => any): Config {
 
     return {
         geminiApiKey: getEnvVarString('GEMINI_API_KEY'),
+        postgreDatabaseUrl: getEnvVarString('POSTGRE_DATABASE_URL'),
         containerModeOn: getEnvVarBoolean('CONTAINER_MODE_ON', true)
     };
 }
