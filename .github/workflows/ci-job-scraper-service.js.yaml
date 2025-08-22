@@ -17,6 +17,7 @@ jobs:
         environment: development
         env:
             GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+            POSTGRE_DATABASE_URL: ${{ secrets.POSTGRE_DATABASE_URL }}
             TEST_VALID_JOB_URL: ${{ vars.TEST_VALID_JOB_URL }}
             TEST_SAMPLE_STRING: ${{ vars.TEST_SAMPLE_STRING }}
             TEST_SAMPLE_NUMBER: ${{ vars.TEST_SAMPLE_NUMBER }}
