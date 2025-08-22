@@ -1,3 +1,4 @@
+import config from '@/config';
 import fs from 'fs';
 
 /**
@@ -9,33 +10,45 @@ import fs from 'fs';
  * @returns {boolean} `true` if running inside Docker or Kubernetes, otherwise `false`.
  */
 export function isContainerized(): boolean {
-  try {
-    if (fs.existsSync('/.dockerenv')) return true;
+    if (typeof config.containerModeOn === 'boolean') {
+        // If container mode is explicitly set in the config, return that value
+        console.log(`Container mode is set to: ${config.containerModeOn}`);
+        return config.containerModeOn;
+    }
 
-    const cgroup = fs.readFileSync('/proc/self/cgroup', 'utf8');
-    if (cgroup.includes('docker') || cgroup.includes('kubepods')) return true;
-  } catch {
-    // ignore
-  }
+    try {
+        if (fs.existsSync('/.dockerenv')) return true;
 
-  return false;
+        const cgroup = fs.readFileSync('/proc/self/cgroup', 'utf8');
+        if (cgroup.includes('docker') || cgroup.includes('kubepods')) return true;
+    } catch {
+        // ignore
+    }
+
+    return false;
 }
+
+type EnvVarOptionalIfTrue<T extends boolean, U> = T extends true ? U | null : U;
 
 /**
  * Retrieves the value of the specified environment variable as a string.
  *
  * @param varName - The name of the environment variable to retrieve.
- * @param configLoaderFn - Optional function to load configuration if needed.
+ * @param optional - If `true`, the function will not throw an error if the variable is not defined.
  * @returns The value of the specified environment variable.
  * @throws {Error} If the environment variable is not defined.
  */
-export function getEnvVarString(varName: string): string {
-  const envVar = process.env[varName];
-  if (envVar === undefined) {
-    throw Error(`Following environment variable not provided: ${varName}`);
-  }
+export function getEnvVarString<T extends boolean = false>(
+    varName: string,
+    optional?: T
+): EnvVarOptionalIfTrue<T, string> {
+    const envVar = process.env[varName];
+    if (envVar === undefined) {
+        if (optional) return null as EnvVarOptionalIfTrue<T, string>;
+        throw Error(`Following environment variable not provided: ${varName}`);
+    }
 
-  return envVar;
+    return envVar as EnvVarOptionalIfTrue<T, string>;
 }
 
 /**
@@ -43,17 +56,21 @@ export function getEnvVarString(varName: string): string {
  * Throws an error if the environment variable is not a valid number.
  *
  * @param varName - The name of the environment variable to retrieve.
- * @param configLoaderFn - Optional function to load configuration if needed.
+ * @param optional - If `true`, the function will not throw an error if the variable is not defined.
  * @returns The numeric value of the environment variable.
  * @throws {Error} If the environment variable is not a valid number or not defined.
  */
-export function getEnvVarNumber(varName: string): number {
-  const envVar = Number(getEnvVarString(varName));
-  if (isNaN(envVar)) {
-    throw Error(`Environment variable ${varName} is not a valid number`);
-  }
+export function getEnvVarNumber<T extends boolean = false>(
+    varName: string,
+    optional?: T
+): EnvVarOptionalIfTrue<T, number> {
+    const envVar = Number(getEnvVarString(varName));
+    if (isNaN(envVar)) {
+        if (optional) return null as EnvVarOptionalIfTrue<T, number>;
+        throw Error(`Environment variable ${varName} is not a valid number`);
+    }
 
-  return envVar;
+    return envVar as EnvVarOptionalIfTrue<T, number>;
 }
 
 /**
@@ -62,15 +79,19 @@ export function getEnvVarNumber(varName: string): number {
  * Throws an error if the variable is not set to either "true" or "false".
  *
  * @param varName - The name of the environment variable to retrieve.
- * @param configLoaderFn - Optional function to load configuration if needed.
+ * @param optional - If `true`, the function will not throw an error if the variable is not defined.
  * @returns `true` if the environment variable is "true", `false` if it is "false".
  * @throws {Error} If the environment variable is not set to "true", "false" or not defined.
  */
-export function getEnvVarBoolean(varName: string): boolean {
-  const envVar = getEnvVarString(varName).toLowerCase();
-  if (envVar !== 'true' && envVar !== 'false') {
-    throw Error(`Environment variable ${varName} must be 'true' or 'false'`);
-  }
+export function getEnvVarBoolean<T extends boolean = false>(
+    varName: string,
+    optional?: T
+): EnvVarOptionalIfTrue<T, boolean> {
+    const envVar = getEnvVarString(varName).toLowerCase();
+    if (envVar !== 'true' && envVar !== 'false') {
+        if (optional) return null as EnvVarOptionalIfTrue<T, boolean>;
+        throw Error(`Environment variable ${varName} must be 'true' or 'false'`);
+    }
 
-  return envVar === 'true';
+    return (envVar === 'true') as EnvVarOptionalIfTrue<T, boolean>;
 }
