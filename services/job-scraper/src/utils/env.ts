@@ -64,7 +64,7 @@ export function getEnvVarNumber<T extends boolean = false>(
     varName: string,
     optional?: T
 ): EnvVarOptionalIfTrue<T, number> {
-    const envVar = Number(getEnvVarString(varName));
+    const envVar = Number(getEnvVarString(varName, optional));
     if (isNaN(envVar)) {
         if (optional) return null as EnvVarOptionalIfTrue<T, number>;
         throw Error(`Environment variable ${varName} is not a valid number`);
@@ -87,7 +87,7 @@ export function getEnvVarBoolean<T extends boolean = false>(
     varName: string,
     optional?: T
 ): EnvVarOptionalIfTrue<T, boolean> {
-    const envVar = getEnvVarString(varName).toLowerCase();
+    const envVar = getEnvVarString(varName, optional)?.toLowerCase();
     if (envVar !== 'true' && envVar !== 'false') {
         if (optional) return null as EnvVarOptionalIfTrue<T, boolean>;
         throw Error(`Environment variable ${varName} must be 'true' or 'false'`);
