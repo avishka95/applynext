@@ -2,7 +2,8 @@ name: CI - Job Scraper Service
 
 on:
     push:
-        branches: ["main"]
+        branches:
+            - main
         paths:
             - "services/job-scraper/**"
     pull_request:
@@ -37,5 +38,5 @@ jobs:
             - run: npm ci
             - name: Install Playwright Browsers
               run: npx playwright install --with-deps chromium
-            - run: npm test
             - run: npm run build --if-present
+            - run: npm test
