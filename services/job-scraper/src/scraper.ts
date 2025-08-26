@@ -2,6 +2,7 @@ import { Browser, chromium, Page } from 'playwright-core';
 
 import fs from 'fs';
 import { isContainerized } from './utils/env';
+import logger from './utils/logger';
 
 /**
  * Extracts the content of a web page at the specified URL and generates a PDF buffer of the rendered page.
@@ -25,7 +26,7 @@ export async function extractPageToPdf(url: string): Promise<Buffer> {
     if (!response || !response.ok) {
         throw new Error(`Failed to fetch the URL: ${url}`);
     }
-    console.log('isContainerized:', isContainerized());
+
     const browser = await chromium.launch({
         executablePath: isContainerized() ? '/usr/bin/chromium-browser' : undefined,
         args: isContainerized() ? ['--no-sandbox', '--disable-dev-shm-usage'] : []
@@ -48,7 +49,7 @@ export async function extractPageToPdf(url: string): Promise<Buffer> {
             browser.close();
         }); // In-memory PDF generation
     } catch (error) {
-        console.error('Error extracting page to PDF:', error);
+        logger.error('Error extracting page to PDF:', error);
         await browser.close();
         throw error; // Re-throw the error for further handling
     }

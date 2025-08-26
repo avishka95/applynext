@@ -7,6 +7,8 @@ interface Config {
     geminiApiKey: string;
     postgreDatabaseUrl: string;
     containerModeOn: boolean | null;
+    servicePort: number | null;
+    logLevel: string | null;
 }
 
 function loadEnvConfig(preLoadFn?: () => any): Config {
@@ -17,7 +19,9 @@ function loadEnvConfig(preLoadFn?: () => any): Config {
     return {
         geminiApiKey: getEnvVarString('GEMINI_API_KEY'),
         postgreDatabaseUrl: getEnvVarString('POSTGRE_DATABASE_URL'),
-        containerModeOn: getEnvVarBoolean('CONTAINER_MODE_ON', true)
+        containerModeOn: getEnvVarBoolean('CONTAINER_MODE_ON', true),
+        servicePort: getEnvVarNumber('SERVICE_PORT', true),
+        logLevel: getEnvVarString('LOG_LEVEL', true)
     };
 }
 

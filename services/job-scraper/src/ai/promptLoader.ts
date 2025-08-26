@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { JobExtractionPromptName } from './types';
+import logger from '@/utils/logger';
 
 class PromptLoader {
     private static instance: PromptLoader;
@@ -22,7 +23,7 @@ class PromptLoader {
             }
         }
 
-        console.log(`✅ Loaded ${this.prompts.size} prompts`);
+        logger.debug(`✅ Loaded ${this.prompts.size} prompts`);
         return this.prompts.size;
     }
 

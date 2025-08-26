@@ -68,7 +68,7 @@ export enum HttpStatusServerError {
     NETWORK_AUTHENTICATION_REQUIRED = 511
 }
 
-export default class AppError extends Error {
+export default class ServiceError extends Error {
     public readonly statusCode: number;
     public readonly status: 'fail' | 'error';
     constructor(

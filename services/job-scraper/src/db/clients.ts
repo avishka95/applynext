@@ -1,19 +1,25 @@
-import config from '@/config';
-import { Pool } from 'pg';
+import config from '../config';
+import ServiceError from '../errors/ServiceError';
+import { Pool as PgPool, QueryResult as PgQueryResult } from 'pg';
 
-export const pgPool = new Pool({
+export const pgPool = new PgPool({
     connectionString: config.postgreDatabaseUrl
 });
 
-export const healthCheck = async () => {
+/**
+ * Checks the health of the PostgreSQL database by executing a simple query.
+ *
+ * @returns {Promise<boolean>} A promise that resolves to `true` if the database responds successfully, otherwise throws a ServiceError.
+ * @throws {ServiceError} If the health check query fails or the database is unreachable.
+ */
+export async function checkPgHealth(): Promise<boolean> {
     try {
-        const res = await pgPool.query('SELECT NOW()');
-        return res.rows[0];
+        const res: PgQueryResult<{ now: string }> = await pgPool.query('SELECT NOW()');
+        return Boolean(res.rows[0]?.now);
     } catch (error) {
-        console.error('Database health check failed:', error);
-        throw error;
+        throw new ServiceError('Database health check failed for PostgreSQL DB', 500);
     }
-};
+}
 
 /**
  * Executes a SQL query using the PostgreSQL connection pool.
@@ -32,10 +38,10 @@ export const queryPg = (text: string, params?: any[]) => {
  *
  * @returns {Promise<void>} A promise that resolves when the pool has been closed.
  */
-async function shutdown() {
+async function shutdown(): Promise<void> {
     await pgPool.end(); // closes all idle clients
     console.log('PostgreSQL pool has been closed.');
 }
 
-process.on('SIGINT', shutdown); // Ctrl+C
-process.on('SIGTERM', shutdown); // Kill signal
+// process.on('SIGINT', shutdown); // Ctrl+C
+// process.on('SIGTERM', shutdown); // Kill signal
