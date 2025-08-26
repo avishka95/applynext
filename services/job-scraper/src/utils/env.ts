@@ -1,4 +1,4 @@
-import config from '@/config';
+import config from '../config';
 import fs from 'fs';
 
 /**
@@ -45,7 +45,7 @@ export function getEnvVarString<T extends boolean = false>(
     const envVar = process.env[varName];
     if (envVar === undefined) {
         if (optional) return null as EnvVarOptionalIfTrue<T, string>;
-        throw Error(`Following environment variable not provided: ${varName}`);
+        throw new Error(`Following environment variable not provided: ${varName}`);
     }
 
     return envVar as EnvVarOptionalIfTrue<T, string>;
@@ -64,13 +64,14 @@ export function getEnvVarNumber<T extends boolean = false>(
     varName: string,
     optional?: T
 ): EnvVarOptionalIfTrue<T, number> {
-    const envVar = Number(getEnvVarString(varName, optional));
-    if (isNaN(envVar)) {
+    const envVar = getEnvVarString(varName, optional);
+    const envVarNum = Number(envVar);
+    if (envVar === null || isNaN(envVarNum)) {
         if (optional) return null as EnvVarOptionalIfTrue<T, number>;
-        throw Error(`Environment variable ${varName} is not a valid number`);
+        throw new Error(`Environment variable ${varName} is not a valid number`);
     }
 
-    return envVar as EnvVarOptionalIfTrue<T, number>;
+    return envVarNum as EnvVarOptionalIfTrue<T, number>;
 }
 
 /**
@@ -90,7 +91,7 @@ export function getEnvVarBoolean<T extends boolean = false>(
     const envVar = getEnvVarString(varName, optional)?.toLowerCase();
     if (envVar !== 'true' && envVar !== 'false') {
         if (optional) return null as EnvVarOptionalIfTrue<T, boolean>;
-        throw Error(`Environment variable ${varName} must be 'true' or 'false'`);
+        throw new Error(`Environment variable ${varName} must be 'true' or 'false'`);
     }
 
     return (envVar === 'true') as EnvVarOptionalIfTrue<T, boolean>;
