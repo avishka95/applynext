@@ -22,6 +22,8 @@ jobs:
             TEST_SAMPLE_STRING: ${{ vars.TEST_SAMPLE_STRING }}
             TEST_SAMPLE_NUMBER: ${{ vars.TEST_SAMPLE_NUMBER }}
             TEST_SAMPLE_BOOLEAN: ${{ vars.TEST_SAMPLE_BOOLEAN }}
+            TEST_SAMPLE_USER_ID: ${{ vars.TEST_SAMPLE_USER_ID }}
+            TEST_SAMPLE_JOB_POST_ID: ${{ vars.TEST_SAMPLE_JOB_POST_ID }}
         defaults:
             run:
                 working-directory: services/job-scraper
