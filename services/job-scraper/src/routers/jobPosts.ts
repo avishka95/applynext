@@ -1,4 +1,4 @@
-import { HttpStatusClientError } from '@/errors/ServiceError';
+import { HttpStatusClientError } from '../errors/ServiceError';
 import { getJobPostById } from '../handlers/jobPosts';
 import { NextFunction, Request, Response, Router } from 'express';
 
@@ -13,8 +13,9 @@ router.get('/:id', async (req: Request<{ id: string }>, res: Response, nxtFn: Ne
             .status(HttpStatusClientError.UNAUTHORIZED)
             .json({ error: 'Unauthorized: User context is missing' });
     }
+
     const jobPost = await getJobPostById(id, userId);
-    return jobPost;
+    return res.status(200).json(jobPost);
 });
 
 export default router;
